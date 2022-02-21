@@ -1,0 +1,25 @@
+.content {
+    display: flex;
+    width: 50%;
+    justify-content: center;
+    margin: auto;
+    flex-direction: column;
+}
+
+#createTrening {
+    text-align: center;
+}
+
+#buttonCreate {
+    display: flex;
+    justify-content: center;
+    margin: auto;
+}
+
+.space-top {
+    margin-top: 15px;
+}
+
+.sdp {
+    --theme-color: #ea70de !important; /* violet color */
+}

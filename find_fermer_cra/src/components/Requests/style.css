@@ -1,0 +1,13 @@
+.request{
+  background-color: #d3d3d4;
+}
+
+.blacktop{
+  background-color: black;
+  color: white;
+}
+
+.field{
+  box-shadow: 1px 2px 10px rgba(0,0,0,0.5);
+  border-radius: 2%;
+}

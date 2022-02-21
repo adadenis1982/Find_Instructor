@@ -1,0 +1,93 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String      @id @db.Uuid @default(uuid())
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  username      String      @db.VarChar(255)
+  email         String      @db.VarChar(255) @unique
+  password      String
+  photo         String      @db.Text @default("https://pypik.ru/uploads/posts/2018-09/1536907413_foto-net-no-ya-krasivaya-4.jpg")
+  about         String?
+  token         String?     @db.VarChar(255)
+  is_instructor Boolean     @default(false)
+  adverts       Advert[]
+  comments      Comment[]
+  bookings      Booking[]
+  messages      Message[]
+}
+
+model Advert {
+  id            String      @id @db.Uuid @default(uuid())
+  sport_type    String      @db.VarChar(255)
+  city          String      @db.VarChar(255)
+  title         String      @db.VarChar(255)
+  content       String
+  price         Int
+  picture       String      @db.Text @default("https://cdn.shopify.com/s/files/1/0267/5693/9967/files/Shop_Fitness_Equipment_on_GO_Sport_Mobile_1400x.progressive.jpg?v=1641986757")
+  rating        Float?
+  duration_min  Int?
+  user          User        @relation(fields: [user_id], references: [id])
+  user_id       String      @db.Uuid
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  comments      Comment[]
+  bookings      Booking[]
+  chats         Chat[]
+}
+
+model Comment {
+    id            String     @id @db.Uuid @default(uuid())
+    comment       String
+    stars         Int
+    user          User       @relation(fields: [user_id], references: [id])
+    user_id       String     @db.Uuid
+    advert        Advert     @relation(fields: [advert_id], references: [id])
+    advert_id     String     @db.Uuid
+    createdAt     DateTime   @default(now())
+    updatedAt     DateTime   @updatedAt
+}
+
+model Booking {
+    id            String   @id @db.Uuid @default(uuid())
+    is_confirmed  Boolean?
+    user          User     @relation(fields: [user_id], references: [id])
+    user_id       String   @db.Uuid
+    advert        Advert   @relation(fields: [advert_id], references: [id])
+    advert_id     String   @db.Uuid
+    date          DateTime
+    createdAt     DateTime @default(now())
+    updatedAt     DateTime @updatedAt
+}
+
+model Chat {
+    id            String    @id @db.Uuid @default(uuid())
+    user_id       String    @db.Uuid
+    trainer_id    String    @db.Uuid
+    advert        Advert    @relation(fields: [advert_id], references: [id])
+    advert_id     String    @db.Uuid
+    createdAt     DateTime  @default(now())
+    updatedAt     DateTime  @updatedAt
+    messages      Message[]
+}
+
+model Message {
+    id            BigInt    @id @db.BigInt @default(autoincrement())
+    message       String
+    createdAt     DateTime  @default(now())
+    updatedAt     DateTime  @updatedAt
+    user          User      @relation(fields: [user_id], references: [id])
+    user_id       String    @db.Uuid
+    chat          Chat      @relation(fields: [chat_id], references: [id])
+    chat_id       String    @db.Uuid
+}
